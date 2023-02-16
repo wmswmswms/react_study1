@@ -1,56 +1,53 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const heavyWork = () =>{
-  console.log('무거운 작업');
-  return ['이름1','이름2']
-}
+
 
 
 
 function App() {
 
+  const [count,setCount] = useState(1);
+  const [name,setName] = useState("");
 
-  //heavyWork() 계속 실행됨.  return heavyWork();  콜백 형태로 하면 렌더링 될때 한번만 불려짐
-  // const [names, setNames] = useState(()=>{
-  //   return heavyWork();
-  // }); 
+ 
+  const updateCount = ()=>{
+    setCount(count+1);
+  }
 
-  // heavyWork 이렇게 괄호없이 쓰면 콜백 형태로 되는듯
-  const [names, setNames] = useState(heavyWork);
+  const handleUpdateInput = (e) =>{
+    setName(e.target.value);
+  }
 
-  const [input, setInput] = useState("");
+  /*
+  //레던링 될때마다 실행(디펜던스 어레이가 없으면)
+  useEffect(()=>{
+    console.log('렌더링');
+  }) 
+
+
+  //디펜던스 array에 적용하면처음 랜더링 될때와 count 값이 변경될경우에만 실행
+  useEffect(()=>{
+    console.log('카운트 변화');
+  },[count])
   
+  //디펜던스 array에 적용하면처음 랜더링 될때와 name 값이 변경될경우에만 실행
+  useEffect(()=>{
+    console.log('입력창 변화');
+  },[name])
+  */
 
-
-  const handleInput = (e) =>{
-    setInput(e.target.value);
-    //console.log(input);
-  }
-
-  const names_add = () =>{
-    /*
-    const new_names = [...names];
-    new_names.push(input);
-    setNames(new_names);
-    */
-
-    setNames((prevState)=>{
-      //return [input,...prevState] //새값을 기존 배열 앞에
-      return [...prevState,input] //새값을 기존 배열 뒤에
-    })
-  }
+  //디펜던스 어레이에 빈 어레이를 넣으면 처음 한번만 실행됨
+  useEffect(()=>{
+    console.log('처음 랜더링만');
+  },[])
 
   return (
     <div className="App">
-      <input type="text" name="input_name" onChange={handleInput}></input>
-      <button onClick={names_add}>upload</button>
-      {
-        names.map((name,idx)=>{
-          //console.log(idx);
-          return <p key={idx}>{name}</p>
-        })
-      }
+      <button onClick={updateCount}>Update</button>
+      count: {count}
+      <input type="text" onChange={handleUpdateInput}></input>
+      <span>{name}</span>
     </div>
   );
 }
