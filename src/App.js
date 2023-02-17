@@ -1,32 +1,19 @@
-import './App.css';
+import './style1.css';
 import {useState,useRef, useEffect } from 'react';
-//import Timer from './componet/Timer';
+//#import  Header  from './componet/Header';
+import Page from './componet/Page';
 
 
 
 
 function App() {
-  
-  const inputRef = useRef();
 
-  useEffect(()=>{
-    //console.log(inputRef);
-    inputRef.current.focus();
-  },[])
-
-  const login = () =>{
-    alert(`환영합니다. ${inputRef.current.value}`);
-    inputRef.current.value = "";
-    inputRef.current.focus();    
-  }
-
-
+  const [isDark, setIsdark] = useState(false);
 
   return (
-    <div className="App">      
-      <input type="text" ref={inputRef} placeholder='username'></input>
-      <button onClick={login}>로그인</button>
-    </div>
+   
+      <Page isDark={isDark} setIsdark={setIsdark}></Page>
+    
   );
 }
 
