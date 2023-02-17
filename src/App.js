@@ -7,25 +7,25 @@ import {useState,useRef, useEffect } from 'react';
 
 function App() {
   
-
-  //useRef는 값이 바뀌어도 렌더링 되지 않는다
-  //랜더링 수 구하는 예  
-  const [count, setCount] = useState(0);
-  const renderCount = useRef(0);
+  const inputRef = useRef();
 
   useEffect(()=>{
-    renderCount.current++;
-  });
+    //console.log(inputRef);
+    inputRef.current.focus();
+  },[])
 
-  const increaseCount = ()=>{
-    setCount(count+1);
-  }  
+  const login = () =>{
+    alert(`환영합니다. ${inputRef.current.value}`);
+    inputRef.current.value = "";
+    inputRef.current.focus();    
+  }
+
 
 
   return (
     <div className="App">      
-      렌더링 카운트: {renderCount.current}
-      <button onClick={increaseCount}>count증가</button>
+      <input type="text" ref={inputRef} placeholder='username'></input>
+      <button onClick={login}>로그인</button>
     </div>
   );
 }
