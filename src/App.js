@@ -1,24 +1,64 @@
-import './style1.css';
-import {useState,useRef, useEffect,useContext } from 'react';
-import { ThemeContext } from './context/ThemeContext';
-import { UseContext } from './context/UserContext';
-import Page from './componet/Page';
+//import './style1.css';
+import {useState,useRef, useEffect,useContext,useMemo } from 'react';
 
+
+const hardCalculator = (hardNumber)=>{
+  console.log('어려운 계산됨');
+  for(let i=0;i<=999999999;i++){
+
+  }
+  return hardNumber + 10000;
+}
+
+
+const easyCalculator = (easyNumber)=>{
+  console.log('쉬운 계산됨');
+  return easyNumber + 1;
+}
 
 
 function App() {
 
-  const [isDark, setIsdark] = useState(false);
+  const [hardNumber, setHardnumber] = useState(1);
+  const [easyNumber, seteasyNumber] = useState(1);
 
-  //contenxt 로 감싸주고 value에 useState 명을 지정하여 하위 컴포넌트 들 에서 사용 가능하게 해준다.
-  //props 를 사용하지 않아도 되므로 자식의 자식등등 하위컴포넌트 들에서 userContext 로 받아서 사용한다
-  //Provider value 에서 1개면 value 는 object형태로 해야됨. value 가 1개면 {} 2개면 {{}} 형태로
+
+  //useNemo 는 렌더링될때 처리 예외를 할 수 있다
+  //[hardNumber] 은 hardNumber 값이 변경될 때만 실행한다. [] 를 넣으면 최초 한번만 실행
+  const hardSum = useMemo(()=>{
+    return hardCalculator(hardNumber);
+  },[hardNumber]);
+
+  // const hardSum = hardCalculator(hardNumber);
+  const easyNum = easyCalculator(easyNumber);
+
   return (      
-      <UseContext.Provider value={'이름바꿈'}>  
-        <ThemeContext.Provider value={{isDark, setIsdark}}>
-          <Page isDark={isDark} setIsdark={setIsdark}></Page>
-        </ThemeContext.Provider>
-      </UseContext.Provider>
+      <div>
+        <h3>어려운 계산기</h3>
+        <input 
+        type="number"
+        value={hardNumber}
+        onChange={(e)=>{
+          setHardnumber(parseInt(e.target.value));
+        }}
+        >
+        </input>
+        <span>+ 10000 = {hardSum}</span>
+
+
+        <h3>쉬운 계산기</h3>
+        <input 
+        type="number"
+        value={easyNumber}
+        onChange={(e)=>{
+          seteasyNumber(parseInt(e.target.value));
+        }}
+        >
+        </input>
+        <span>+ 1 = {easyNum}</span>
+
+      </div>
+
   );
 }
 
