@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
+import { UseContext } from "../context/UserContext";
 
-const Content = ({isDark})=>{
+const Content = ()=>{
+    const {isDark} = useContext(ThemeContext);
+    const user = useContext(UseContext);
     return(
         <div 
         className="content"
@@ -10,7 +14,7 @@ const Content = ({isDark})=>{
         }}
         
         >
-            홍길동님 좋은 하루되세요
+           {user}님 좋은 하루되세요
         </div>
     )
 }

@@ -2,15 +2,15 @@ import React from "react";
 import Header from "./Header";
 import Content from "./Content";
 import Footer from "./Footer";
+import { ThemeContext } from "../context/ThemeContext";
 
 
-const Page = ({isDark, setIsdark})=> {
-    console.log(isDark);
+const Page = ({isDark, setIsdark})=> {    
     return(
         <div>
-            <Header isDark={isDark} setIsdark={setIsdark} />
-            <Content isDark={isDark} setIsdark={setIsdark}></Content>
-            <Footer isDark={isDark} setIsdark={setIsdark}></Footer>
+            <Header  />
+            <Content></Content>
+            <Footer></Footer>
             
         </div>
     );
