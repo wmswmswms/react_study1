@@ -2,61 +2,52 @@
 import {useState,useRef, useEffect,useContext,useMemo } from 'react';
 
 
-const hardCalculator = (hardNumber)=>{
-  console.log('어려운 계산됨');
-  for(let i=0;i<=999999999;i++){
-
-  }
-  return hardNumber + 10000;
-}
-
-
-const easyCalculator = (easyNumber)=>{
-  console.log('쉬운 계산됨');
-  return easyNumber + 1;
-}
-
 
 function App() {
 
-  const [hardNumber, setHardnumber] = useState(1);
-  const [easyNumber, seteasyNumber] = useState(1);
+  const [number, setNumber] = useState(1);
+  const [isKorea,setIskorea] = useState(true);
+  
 
+  //number 값이 변경하여 재 렌더링 될때
+   // const location = isKorea ? "한국" :  "외국";
+   //위와같이 일반 변수 사용시에는 값이 그대로 저장되어있는 형태라서 하단의 useEffect가 실행이 안되지만
+   // const location = {
+  //    country :  isKorea ? "한국" :  "외국",
+   //}
+   //이렇게 object 형태는 메모리에 값이 저장되고 그메모리가주소가 생기는것이기 때문에
+   //값이 바뀌는것으로 인삭함
+   // 그래서 useMemo를 사용한다
+   //useMemo 는 return 해줘야됨
+   //useMemo 는 값이 저장되는 형태임
+  const location = useMemo(()=>{
+    return{
+      country :  isKorea ? "한국" :  "외국",
+    }
+  },[isKorea])
 
-  //useNemo 는 렌더링될때 처리 예외를 할 수 있다
-  //[hardNumber] 은 hardNumber 값이 변경될 때만 실행한다. [] 를 넣으면 최초 한번만 실행
-  //안에서 return 사용 해야됨
-  const hardSum = useMemo(()=>{
-    return hardCalculator(hardNumber);
-  },[hardNumber]);
+  
 
-  // const hardSum = hardCalculator(hardNumber);
-  const easyNum = easyCalculator(easyNumber);
+  // location값이 바뀔때만 실행함
+  useEffect(()=>{
+    console.log('useEffect호출')
+  },[location]);
 
   return (      
       <div>
-        <h3>어려운 계산기</h3>
-        <input 
-        type="number"
-        value={hardNumber}
-        onChange={(e)=>{
-          setHardnumber(parseInt(e.target.value));
-        }}
+        <h3>하루에 몇기 먹어요?</h3>
+        <input
+          type="number"
+          value={number}
+          onChange={(e)=>{
+            setNumber(e.target.value);
+          }}
         >
         </input>
-        <span>+ 10000 = {hardSum}</span>
 
-
-        <h3>쉬운 계산기</h3>
-        <input 
-        type="number"
-        value={easyNumber}
-        onChange={(e)=>{
-          seteasyNumber(parseInt(e.target.value));
-        }}
-        >
-        </input>
-        <span>+ 1 = {easyNum}</span>
+        <h3>어느나라에 있어요?</h3>
+        나라: {location.country}
+        <button onClick={()=>setIskorea(!isKorea)}>바꾸기</button>
 
       </div>
 
