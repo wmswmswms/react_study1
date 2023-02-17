@@ -25,6 +25,7 @@ function App() {
 
   //useNemo 는 렌더링될때 처리 예외를 할 수 있다
   //[hardNumber] 은 hardNumber 값이 변경될 때만 실행한다. [] 를 넣으면 최초 한번만 실행
+  //안에서 return 사용 해야됨
   const hardSum = useMemo(()=>{
     return hardCalculator(hardNumber);
   },[hardNumber]);
