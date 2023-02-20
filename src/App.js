@@ -1,42 +1,53 @@
 //import './style1.css';
-import {useState,useRef, useEffect,useContext,useMemo,useCallback } from 'react';
-
+//import { isValidInputTimeValue } from '@testing-library/user-event/dist/utils';
+import { useCallback, useState } from 'react';
+import Box from './Box';
 
 
 function App() {
 
-  const [number, setNumber] = useState(0);
-  const [toggle, setToggle] =  useState(true);
+  const [size, setSize] = useState(100);
+  const [isDark, setIsDark] = useState(false);
 
 
-  //useCallback 의존성배열인 number 값이 변할경우에만 실행
-  //의존성배열을 [] 하면 처음 한번만 실행되므로 number 값이 처음값인 0만 저장이 되어서
-  //nummber 값이 변한후 someFunction을 실행해도 number 값이 0이된다.
-  const someFunction = useCallback(()=>{
-    console.log(`someFunction: number: ${number}`);    
-  },[number]);
+  //useCallback 을 사용 하여 size값이 바뀔경우에만 실행
+  // 함수명 = useCallback... 안에 return 값 정의
+  const boxStyle = useCallback(()=>{
+
+ 
+      return{
+        backgroundColor: 'pink',
+        width: `${size}px`,
+        height: `${size}px`,
+      }    
+   
+
+  },[size])
+  
+
+
 
   
 
-  useEffect(()=>{
-    console.log('someFunction이 변경되었습니다.')
-  },[someFunction]);
-
   return (      
-      <div>
+      <div style={
+        {
+          background: isDark? 'black' : 'white'
+        }
+      }>
        
         <input
           type="number"
-          value={number}
+          value={size}
           onChange={(e)=>{
-            setNumber(e.target.value);
+            setSize(e.target.value);
           }}
         >
         </input>
+        <button onClick={()=>{ setIsDark(!isDark) }}>배경변경</button>
+        <Box createBoxStyle={boxStyle}></Box>
 
-        <button onClick={()=> setToggle(!toggle)}>{toggle.toString()}</button>
-          
-        <button onClick={someFunction}>someFunction실행</button>
+        
 
       
 
