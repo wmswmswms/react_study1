@@ -1,13 +1,13 @@
 import React,{memo} from "react";
 
 
-const Child = ({name, age})=>{
+const Child = ({name})=>{
     console.log('자녀 컴포넌트가 렌더링 되었어요')
     return(
         <div>
             <p>자녀</p>
-            <p>name: {name}</p>
-            <p>age: {age}살</p>
+            <p>성: {name.lastName}</p>
+            <p>이름: {name.firstName}</p>
         </div>
     )
 }
