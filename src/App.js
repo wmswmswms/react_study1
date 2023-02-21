@@ -1,7 +1,7 @@
 //import './style1.css';
 //import { isValidInputTimeValue } from '@testing-library/user-event/dist/utils';
 import { useCallback, useState,useReducer } from 'react';
-import Box from './Box';
+import Student from './componet/Students';
 
 
 //userReducer 
@@ -9,66 +9,107 @@ import Box from './Box';
 //dispathch - state 업데이트를 위한 요구
 //action - 요구의 내용
 
-//오브젝트형태의 변수로 빼서 변수값을 일괄 관리함
-const ACTION_TYPES = {
-  deposit: 'deposit',
-  withdraw: 'withdraw'
-}
-
-//useReducer 사용시 첫번째 인자값이 함수명이 된다.
-//useReducer 사용시 첫번째값이 아래 첫번쨰 인자와 같다
-//useReducer 사용시 두번째 인자값의 이름으로 action에 오브젝트값을 담아서 보내면 여기서 처리한디ㅏ
-const reducer = (state, action) =>{
-  console.log('dispatch 함수 실행됨', state, action);
+const reducer = (state,action) =>{  
   
-    switch(action.type){
-      case ACTION_TYPES.deposit:
-        return state + action.payload;
-      case ACTION_TYPES.withdraw:
-        return state - action.payload;        
-      default:
+  switch(action.type){    
+    case 'add-student':
+      const name = action.payload.name;
+      if(name == ""){
+        alert('이름을 입력하세요');
         return state;
-    }
+      }
+      const newStudent = {
+        id: Date.now(),
+        name, //key 와 value가 같으면 생략가능 ,
+        isHere: false,
+      }
+      
+      console.log(state.count +1);
+      return {
+        count: state.count +1,
+        students : [...state.students,newStudent],  //기존 배열에 새벼열을 추가
+      }      
 
-  
-  
+    case 'delete-student':
+      console.log(state,action);
+      return{
+        count: state.count-1,
+        students: state.students.filter(  //filter 는 일치하지 않는것만 구한다는듯 
+          // (student) 는 state.students 값을 사용하는것이므로 선언하는 인자값이므로 임의로 사용
+          // onClick={(e)=>{}} 이것과 같은 의미
+          (student) => student.id !== action.payload.id 
+        )
+      }
+    
+    case 'mark-student':
+      return{
+        count: state.count,
+        students: state.students.map((student)=>{
+          
+          if(student.id === action.payload.id){            
+            //console.log(student.name+'변경');
+            if(student.isHere == false){
+              var name_re = student.name+'변경'
+            }else{
+              var name_re = student.name.replace(/변경/gi,"");  
+            }
+            
+            
+            return {...student, isHere: !student.isHere, name: name_re }  //배열안에 해당 배열값을 변경
+            //return student;  
+          }
+          return student;        
+        })
+      }
+
+    default:
+      return state;
+  };  
 }
+
+
+const initialState = {
+  count: 0,
+  students: [],
+}
+
+
+
 
 function App() {
 
-  const [number, setNumber] = useState(0);
-  const [money, dispathch22] = useReducer(reducer,0); //첫번째값: state, 두번째값은 요구. 첫번째인자 호출함수, 두번쨰값 money 값 정의
+  const [name, setName] = useState('');
+
+  //첫번째 배열값은 state명칭, 두번쨰 배열값은 요구사항 명칭
+  //첫번쨰 인자값은 reducer 정의 함수명, 두번째 인자값은 state의 값 정의 함수명
+  //첫번째배열값으로 하단에서 정의 한다.
+  //첫번쨰 인자값의 reducer 함수안에서는 두번째 인자값이 같이 전달되기 때문에 첫번쨰 인자값 함수 안에서 사용이 가능함
+  const [studentInfo, dispatch] = useReducer(reducer,initialState); 
    
 
   return (      
       <div>
-        <h1>useReducer 은행에 오신것을 환영합니다.</h1>
-        <p>잔고: {money}</p>
-        <input
-          type="number"
-          value={number}
-          onChange={(e)=>{
-            setNumber(parseInt(e.target.value));
-          }}
-          step="1000"
-        >
-        </input>
+        <h1>출석부</h1>      
+        <p>총 학생수 {studentInfo.count}</p>
+        <input          
+          type="text" 
+          value={name}
+          onChange={(e)=> setName(e.target.value)}
+        ></input>
         <button onClick={()=>{
-          dispathch22({
-            type: ACTION_TYPES.deposit,
-            payload: number
+          dispatch({
+            type: 'add-student',
+            payload: {name}
           })
-        }}>입금</button>
-        <button onClick={()=>{
-          dispathch22({
-            type: ACTION_TYPES.withdraw,
-            payload: number
+        }}>추가</button>
+
+        {
+          studentInfo.students.map((student)=>{       
+            return(
+              <Student key={student.id} name={student.name} dispatch={dispatch} id={student.id} isHere={student.isHere} /> 
+            ) 
           })
-        }}>출금</button>
-
-        
-
-      
+        }     
 
       </div>
 
