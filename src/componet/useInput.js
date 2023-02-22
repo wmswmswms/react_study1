@@ -18,6 +18,9 @@ export function useInput(initialValue, submitAction){
     }
 
     const handleSubmit = ()=>{
+
+      //빈값처리가 되지만
+      //리액트가 제공하는 이벤트 핸들러에 등록이 되어서, 리액트의 판단에따라 가장 좋은 시점에 실행이 됩니다. 그렇기때문에 결과적으로 submitAction이 더 먼저 실행이 되는거죠
       setInputValue('')
       submitAction(inputValue);
     }
