@@ -1,45 +1,40 @@
 //import './style1.css';
 //import { isValidInputTimeValue } from '@testing-library/user-event/dist/utils';
 import { useCallback, useState,useReducer } from 'react';
-import Child from './componet/Child';
+import { useInput } from './componet/useInput';
+
+
+
+const displayMessage = (message)=>{
+  alert(message);
+}
 
 function App() {
 
-  const [parentAge, setParentAge] = useState(0);
+  //useInput.js 에서의  리턴값이 return [inputValue, handleChange]; 데로 명시해준다
+  //useInpt(,) useInput.js 에 매겨변수로 넘겨준다.
+  //onChange onClick 에 명시된 함수를 실행해준다고 생각하면 됨  
+  //displayMessage는 매개변수 이름이고 useInput.js 에서 매개변수로 받는다(매개변수 주고받을때 이름이 같을 필요는 없는듯)
+  //app.js 에서의 함수명을 입력해서 usInput.js에서 submitAction(inputValue); 이런행태로 받은것을 displayMessage 함수에서 처리
+  const [inputValue, handleChange, handleSubmit] = useInput('',displayMessage);
   
-
-  const increaseParentAge = ()=>{
-    setParentAge(parentAge + 1);
-  }
-
-  console.log('부모 컴포넌트가 렌더링 되었어요')
-
-  //parentAge 값변경시  <Child name={'홍길동'} tellMe={tellMe}></Child>   부분 name값 tellMe 함수 변동이 없고
-  //Child 컴포넌트에 Memo 를 적용했는데도 Child 컴포넌트가 실행이 된다
-  //함수도 객체와 동일하게 메모리값 형태로 저장되기 때문에 값이 변한걸로 인식이 되기 때문이다
-  //그래서 함수일경우 useCallback 을 사용한다.
-
-  // const tellMe = ()=>{
-  //   console.log('tellMe 실행')
-  // }
+  //useInput
 
 
-  const tellMe = useCallback(()=>{
-    console.log('tellMe 실행');
-  },[])
 
 
   return (  
-      <>
-      <div style={{ border: '2px solid navy', padding: '10px' }}>
-        <h1>부모</h1>
-        <p>{parentAge}</p>
-        <button onClick={increaseParentAge}>부모 나이 증가</button>
+      
+      <div>
+        <h1>useInput</h1>
+
+        <input type="text" value={inputValue} onChange={handleChange}></input>        
+        <button onClick={handleSubmit}>확인</button>
+        
 
         
       </div>
-      <Child name={'홍길동'} tellMe={tellMe}></Child>  
-      </>
+      
   );
 }
 
