@@ -1,38 +1,40 @@
 //import './style1.css';
 //import { isValidInputTimeValue } from '@testing-library/user-event/dist/utils';
-import { useCallback, useState,useReducer } from 'react';
-import { useInput } from './componet/useInput';
+import { useCallback, useState,useReducer, useEffect } from 'react';
+import { useFetch } from './useFetch';
 
 
-
-const displayMessage = (message)=>{
-  alert(message);
-}
+const baseUrl = "https://jsonplaceholder.typicode.com";
 
 function App() {
 
-  //useInput.js 에서의  리턴값이 return [inputValue, handleChange]; 데로 명시해준다
-  //useInpt(,) useInput.js 에 매겨변수로 넘겨준다.
-  //onChange onClick 에 명시된 함수를 실행해준다고 생각하면 됨  
-  //displayMessage는 매개변수 이름이고 useInput.js 에서 매개변수로 받는다(매개변수 주고받을때 이름이 같을 필요는 없는듯)
-  //app.js 에서의 함수명을 입력해서 usInput.js에서 submitAction(inputValue); 이런행태로 받은것을 displayMessage 함수에서 처리
-  const [inputValue, handleChange, handleSubmit] = useInput('',displayMessage);
-  
-  //useInput
+  //리스트 예
+  // const {data, fetchUrl} = useFetch(baseUrl, "users");
 
-
-
+  //1개의 데이타 불러오는 예
+  //data: userData 는 받아온값의 변수명을 userData 로 변경한다는말
+   const {data: userData} = useFetch(baseUrl,'users');
+   const {data: postData} = useFetch(baseUrl,'posts');
+   const {data: todoData} = useFetch(baseUrl,'todos');
 
   return (  
       
       <div>
-        <h1>useInput</h1>
+        <h1>useFetch</h1>
+        {/* 리스트 불러오는 예 */}
+          {/* <button onClick={()=> fetchUrl('users')}>users</button>
+          <button onClick={()=> fetchUrl('posts')}>posts</button>
+          <button onClick={()=> fetchUrl('todos')}>todos</button>  
+          <pre>{JSON.stringify(data, null, 2)}</pre>         */}
 
-        <input type="text" value={inputValue} onChange={handleChange}></input>        
-        <button onClick={handleSubmit}>확인</button>
-        
+        {/* 1개의 데이타 불러오는 예 */}
+          <h1>users</h1>
+          {userData && <pre>{JSON.stringify(userData[0], null, 2)}</pre>}
+          <h1>posts</h1>
+          {postData && <pre>{JSON.stringify(postData[0], null, 2)}</pre>}
+          <h1>users</h1>
+          {todoData && <pre>{JSON.stringify(todoData[0], null, 2)}</pre>}                    
 
-        
       </div>
       
   );
